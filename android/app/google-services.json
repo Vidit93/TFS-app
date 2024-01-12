@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "468775005888",
+    "project_id": "fs-app-ba1e0",
+    "storage_bucket": "fs-app-ba1e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468775005888:android:3a29e88a1c0fc878e9c725",
+        "android_client_info": {
+          "package_name": "com.tfs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLDk-Hzrxaq1bfb4ESn-e_F0wAA38b8K8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
