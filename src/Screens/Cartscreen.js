@@ -12,6 +12,11 @@ import firestore from '@react-native-firebase/firestore';
 import RadioGroup from 'react-native-radio-buttons-group';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import arrow from '../Images/back.png'
+import rupee from '../Images/rupee.png'
+import delete1 from '../Images/delete1.png'
+import minus from '../Images/minus.png'
+import plus from '../Images/plus.png'
 const w = Dimensions.get('screen').width;
 const h = Dimensions.get('screen').height;
 
@@ -22,6 +27,10 @@ export default function Cartscreen() {
   const [radioId, setradioId] = useState('');
   const navigation = useNavigation();
 
+
+  function Backbutton() {
+    navigation.goBack()
+  }
 
   useEffect(() => {
     getData();
@@ -177,37 +186,35 @@ export default function Cartscreen() {
     return (
       <>
         <View style={styles.card_view} >
-          <View>
-            <Image source={{ uri: item.img }} style={styles.card_image} />
+          <View style={styles.card_image_view}>
+            <Image source={{ uri: food.img }} style={styles.card_image} />
           </View>
           <View style={styles.card_content}>
-            <View>
-              <View>
-                <Text>Name: {food.name}</Text>
+            <View style={styles.card_text_container}>
+              <View style={styles.card_text_view}>
+                <Text style={styles.card_text}>{food.name}</Text>
               </View>
-              <View>
-                <Text>Rate: {food.rate}</Text>
+              <View style={styles.card_text_view}>
+                <Image source={rupee} style={styles.rupee_icon} />
+                <Text style={styles.card_text}>{food.rate}</Text>
               </View>
             </View>
-            <View>
+            <View style={styles.btn_qty_view}>
               <View style={styles.card_qty_view}>
-                <View>
-                  <Text>Quantity: </Text>
-                </View>
                 <View style={styles.card_qty_content}>
                   <TouchableOpacity onPress={() => Minusqty(item)}>
-                    <Text style={styles.qty_minus}>minus</Text>
+                    <Image source={minus} style={styles.minus_icon} />
                   </TouchableOpacity>
-                  <Text>{item.qty}</Text>
+                  <Text style={styles.qty_text}>{item.qty}</Text>
                   <TouchableOpacity onPress={() => Plusqty(item)}>
-                    <Text style={styles.qty_plus}>plus</Text>
+                    <Image source={plus} style={styles.plus_icon} />
                   </TouchableOpacity>
                 </View>
               </View>
               <View>
                 <TouchableOpacity onPress={() => Deleteitem(item)}>
                   <View style={styles.btn_view}>
-                    <Text>Delete</Text>
+                    <Image source={delete1} style={styles.delete_icon} />
                   </View>
                 </TouchableOpacity>
               </View>
@@ -220,7 +227,7 @@ export default function Cartscreen() {
 
   function Cartitemshow() {
     return (<>
-      <View style={styles.cart_view}>
+      <View >
         <FlatList
           data={cart}
           renderItem={renderCartItem}
@@ -256,7 +263,7 @@ export default function Cartscreen() {
     ]), []);
 
     return (<>
-      <View>
+      <View style={styles.radio_container_view}>
         <View>
           <RadioGroup
             radioButtons={Dinein}
@@ -294,35 +301,61 @@ export default function Cartscreen() {
     }
   }
 
-console.log('sum ki value',sum);
+  console.log('sum ki value', sum);
   return (
     <>
       {cart ?
-        <View>
-          <View>
+        <View style={styles.container_view}>
+          <View style={styles.buttonview}>
+            <View>
+              <TouchableOpacity onPress={Backbutton}>
+                <View style={styles.arrowview}>
+                  <Image source={arrow} style={styles.arrow} />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.cart_text_view}>
+              <Text style={styles.cart_text}>CART</Text>
+            </View>
+          </View>
+          <View style={styles.cart_view}>
             {Cartitemshow()}
           </View>
-          <View>
-            <View>
-              <Text>SubTotal: {sum}</Text>
+          <View style={styles.bottom_container_view}>
+            <View style={styles.subtotal_container_view}>
+              <View style={styles.subtotal_view}>
+                <Text style={styles.subtotal_text}>SubTotal:</Text>
+              </View>
+              <View style={styles.subtotal_value_view}>
+                <Image source={rupee} style={styles.rupee_icon_bottom} />
+                <Text style={styles.subtotal_value}> {sum}</Text>
+              </View>
             </View>
-            <View>
-              {radioId == '3' ? <Text>Delivery: Free</Text> : <Text>Delivery: --</Text>}
+            <View style={styles.delivery_view}>
+              <Text style={styles.delivery_text_view}>Delivery:</Text>
+              {radioId == '3' ? <Text style={styles.delivery_text}>Free</Text> : <Text style={styles.delivery_text}> --</Text>}
             </View>
-            <View>
-              <Text>Total: {sum}</Text>
+            <View style={styles.subtotal_container_view}>
+              <View style={styles.subtotal_view}>
+                <Text style={styles.subtotal_text}>Total:</Text>
+              </View>
+              <View style={styles.total_value_view}>
+                <Image source={rupee} style={styles.rupee_icon_bottom} />
+                <Text style={styles.subtotal_value}> {sum}</Text>
+              </View>
             </View>
           </View>
-          <View>
+          <View style={styles.radio_button_view}>
             {Radiobuttons()}
           </View>
-          <View>
+          <View style={styles.checkoutContainer}>
             <TouchableOpacity onPress={Checkout}>
-              <View>
-                <Text>CHECK OUT</Text>
+              <View style={styles.checkoutButton}>
+                <Text style={styles.checkoutButtonText}>CHECK OUT</Text>
               </View>
             </TouchableOpacity>
           </View>
+
         </View> :
         <View>
           <Text>Empty cart</Text>
@@ -332,44 +365,202 @@ console.log('sum ki value',sum);
 }
 
 const styles = StyleSheet.create({
+  container_view: {
+    backgroundColor: '#a0b1e7'
+  },
+  buttonview: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  arrow: {
+    width: w * 0.095,
+    height: h * 0.05,
+    marginLeft: w * .04,
+    // marginTop: h * .015,
+  },
+  cart_text_view: {
+    // borderWidth:2,
+    marginLeft: 110,
+
+    //  justifyContent: 'center',
+    //  alignItems: 'center',
+  },
+  cart_text: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: 'black',
+    marginTop: 60
+  },
   card_view: {
     flexDirection: 'row',
-    margin: 20,
-    borderWidth: 2,
-    borderColor: 'red',
+    marginHorizontal: 20,
+    marginTop: 17,
     borderRadius: 10,
+    shadowColor: '#000', // Shadow color
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25, // Opacity of the shadow
+    shadowRadius: 3.84, // Radius of the shadow
+    elevation: 5, // Android elevation (affects shadow appearance)
+    backgroundColor: '#fff', // Background color of the card
+    marginBottom:8
   },
   cart_view: {
-    borderWidth: 2, 
-    borderColor: 'blue', 
-    borderRadius: 10,
-    height: h * .6
+    // borderWidth: 2,
+    // borderColor: 'blue',
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    height: h * .485,
+    backgroundColor: 'white',
+    marginTop: 40,
+    overflow: 'hidden',
+  },
+  card_image_view: {
+    justifyContent: 'center',
+    marginLeft: 3
   },
   card_image: {
     width: 70,
     height: 70,
+    borderRadius: 70,
+    justifyContent: 'center'
   },
   card_content: {
     flexDirection: 'row',
     // margin: 20
   },
+  card_text_container: {
+    // borderWidth:2,
+    width: 170
+  },
+  card_text_view: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+    marginHorizontal: 7,
+  },
+  card_text: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'black',
+    // borderWidth:2
+  },
+  btn_qty_view: {
+    alignItems: 'center',
+    // marginVertical:7
+    marginTop: 7
+  },
   card_qty_view: {
     flexDirection: 'row',
-    marginLeft: 20,
+    // marginLeft: 20,
+
+    // marginVertical:4
   },
   card_qty_content: {
     flexDirection: 'row',
-    marginLeft: 10,
+    marginBottom: 7,
+    // borderWidth: 2,
+    borderRadius: 20,
+    backgroundColor: '#a0b1e7',
+    alignItems: 'center',
+    // justifyContent: 'center',
   },
-  qty_minus: {
-    fontSize: 15,
-    marginRight: 7,
+  minus_icon: {
+    width: 18,
+    height: 18,
+    // marginRight: 7,
+    marginHorizontal: 7,
+    marginVertical: 5
   },
-  qty_plus: {
+  qty_text: {
     fontSize: 15,
+    color: 'black',
+  },
+  plus_icon: {
     marginLeft: 7,
+    width: 18,
+    height: 18,
+    // backgroundColor:'white',
+    borderRadius: 20,
+    marginHorizontal: 7,
+    marginVertical: 4
   },
   btn_view: {
-    marginLeft: 10,
+    // marginLeft: 10,
   },
+  bottom_container_view: {
+    backgroundColor: 'white'
+  },
+  subtotal_container_view: {
+    flexDirection: 'row',
+    marginVertical: 4,
+    marginHorizontal: 7
+  },
+  subtotal_text: {
+    // fontWeight:'700',
+    color: 'black',
+    fontSize: 15,
+    // backgroundColor:"red"
+  },
+  subtotal_value_view: {
+    flexDirection: 'row',
+    marginLeft: 250,
+    // justifyContent:'center',
+    alignItems: 'center'
+  },
+  subtotal_value: {
+    color: 'black',
+  },
+  total_value_view: {
+    flexDirection: 'row',
+    marginLeft: 279,
+    // justifyContent:'center',
+    alignItems: 'center'
+  },
+  rupee_icon_bottom: {
+    // height:18
+  },
+  radio_container_view: {
+    flexDirection: 'row',
+    backgroundColor: "white",
+    gap: 15,
+    paddingVertical:5,
+    justifyContent: 'center'
+  },
+  delivery_view: {
+    marginHorizontal: 7,
+    flexDirection: "row",
+
+  },
+  delivery_text_view: {
+    // fontWeight:'700',
+    color: 'black',
+    fontSize: 15,
+  },
+  delivery_text: {
+    marginLeft: 284,
+    color: 'black',
+  },
+  checkoutContainer: {
+    backgroundColor:"white",
+    alignItems:"center",
+    
+  },
+  checkoutButton: {
+    backgroundColor: '#a0b1f7',
+    padding: 10,
+    borderRadius: 5,
+    width:250,
+    marginBottom:15
+  },
+  checkoutButtonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  
 });

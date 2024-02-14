@@ -80,30 +80,26 @@ export default function Cafescreen() {
 
     return (
         <>
-            <ImageBackground
-            source={require('../Images/img2.jpg')}
-            style={{height:h, width:w}}
-            >
-                <View style={styles.Container_view}>
-                    <View style={styles.top_view}>
-                        <View style={styles.top_text_view}>
-                            <Text style={styles.top_text}>Discover new </Text>
-                            <Text style={styles.top_text}>Delicious just for you!</Text>
-                        </View>
-                    </View>
-                    <View style={styles.carousal_view}>
-                        {Carousel()}
-                    </View>
-                    <View style={styles.category_text_view}>
-                        <View style={styles.category_text_view}>
-                            <Text style={styles.category_text}>FastFood Categories</Text>
-                        </View>
-                    </View>
-                    <View>
-                        {Fooditemshow()}
+            <View style={styles.Container_view}>
+                <View style={styles.top_view}>
+                    <View style={styles.top_text_view}>
+                        <Text style={styles.top_text}>Discover new </Text>
+                        <Text style={styles.top_text}>Delicious just for you!</Text>
                     </View>
                 </View>
-            </ImageBackground>
+                <View style={styles.carousal_view}>
+                    {Carousel()}
+                </View>
+                <View style={styles.category_text_view}>
+                    {/* <View style={styles.category_text_view}>
+                        <Text style={styles.category_text}>FastFood Categories</Text>
+                    </View> */}
+                </View>
+                <View>
+                    {Fooditemshow()}
+                </View>
+            </View>
+
         </>
     );
 }
@@ -112,12 +108,12 @@ export default function Cafescreen() {
 const styles = StyleSheet.create({
 
     Container_view: {
-        // backgroundColor: 'white'
+        // backgroundColor: 'red'
     },
-    carousal_view:{
-        alignSelf:'center',
-        borderWidth:2,
-        borderRadius:12
+    carousal_view: {
+        alignSelf: 'center',
+        // borderWidth: 2,
+        borderRadius: 12
     },
     top_text_view: {
         borderColor: 'green',
@@ -125,7 +121,9 @@ const styles = StyleSheet.create({
         // borderRadius: 10,
         marginBottom: 10,
         // backgroundColor: 'orange',
-        height: 60
+        height: 60,
+        justifyContent:"center",
+        // alignItems:"center"
     },
     top_text: {
         fontSize: 20,
@@ -147,8 +145,6 @@ const styles = StyleSheet.create({
     box_container_view: {
     },
     box_text_view: {
-        // borderColor: 'red',
-        borderWidth: 2,
         borderRadius: 10,
         marginHorizontal: 20,
         marginVertical: 8,
@@ -156,9 +152,16 @@ const styles = StyleSheet.create({
         height: 70,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'orange',
-        elevation: 5,
-    },
+        backgroundColor: 'white',
+        elevation: 7, // For shadow on Android
+        shadowColor: '#000000', // Shadow color
+        shadowOpacity: 0.2, // Shadow opacity
+        shadowOffset: {
+          width: 0, // Horizontal shadow offset
+          height: 2, // Vertical shadow offset
+        },
+        shadowRadius: 4, // Shadow radius
+      },
     box_text: {
 
     },

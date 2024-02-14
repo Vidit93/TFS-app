@@ -3,7 +3,9 @@ import { Text, View, FlatList, Image, StyleSheet, Dimensions, TouchableOpacity }
 import { useRoute } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore';
 import arrow from '../Images/back.png'
-import cart from '../Images/cart.png'
+import cart from '../Images/cart1.png'
+import rupee from '../Images/rupee.png'
+import plus from '../Images/plus.png'
 
 const w = Dimensions.get('screen').width;
 const h = Dimensions.get('screen').height;
@@ -69,7 +71,7 @@ export default function MenuScreen({ navigation }) {
 
   function Foodcardshow() {
     return (<>
-      <View>
+      <View style={styles.flatlist_view}>
         <FlatList
           data={details}
           renderItem={({ item }) => Rendercard(item)}
@@ -82,20 +84,22 @@ export default function MenuScreen({ navigation }) {
   function Rendercard(item) {
     return (<>
       <View style={styles.card_view}>
-        <View>
+        <View style={styles.card_image_view} >
           <Image source={{ uri: item.img }} style={styles.card_image} />
         </View>
-        <View>
-          <View>
-            <Text>Name: {item.name}</Text>
+        <View style={styles.card_text_container}>
+          <View style={styles.card_text_view}>
+            <Text style={styles.card_text}>{item.name}</Text>
           </View>
-          <View>
-            <Text>Rate: {item.rate}</Text>
+          <View style={styles.card_text_view}>
+            <Image source={rupee} style={styles.rupee_icon} />
+            <Text style={styles.card_text}>{item.rate}</Text>
           </View>
         </View>
-        <TouchableOpacity onPress={() => addToCart(item)}>
+        <TouchableOpacity onPress={() => addToCart(item)}  style={styles.btn_container_view}>
           <View style={styles.btn_view}>
-            <Text>Add To Cart</Text>
+            {/* <Text style={styles.btn_text}>Add To Cart</Text> */}
+            <Image source={plus} style={styles.plus_icon} />
           </View>
         </TouchableOpacity>
       </View>
@@ -134,10 +138,10 @@ export default function MenuScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container_view: {
-    backgroundColor: '#15B3ED'
+    backgroundColor: '#07afaa'
   },
-  buttonview:{
-    flexDirection:'row'
+  buttonview: {
+    flexDirection: 'row'
   },
   arrow: {
     width: w * 0.095,
@@ -162,27 +166,81 @@ const styles = StyleSheet.create({
   category_text: {
     fontSize: 30,
     fontWeight: '900',
-    paddingBottom:20,
-    color:'black'
+    paddingBottom: 20,
+    color: 'black'
+  },
+  flatlist_view: {
+    // backgroundColor: 'red',
+    marginTop: 55,
+    // borderWidth:2
   },
   foodcard_view: {
     backgroundColor: 'white',
     height: h,
     borderTopLeftRadius: 100,
-    // marginTop:20
+    // marginLeft:2,
+    // borderWidth:2,
+    // width:w*.98
   },
   card_view: {
     flexDirection: 'row',
-    margin: 20,
-     borderWidth: 2,
+    marginHorizontal:15,
+    marginVertical: 8,
+    borderWidth: 1,
+    // elevation: 5,
+    height:80,
+    borderRadius:15
+    // backgroundColor:''
+  },
+  card_image_view:{
+    justifyContent:'center',
+    marginLeft:3
   },
   card_image: {
     width: 70,
     height: 70,
-    borderRadius: 60,
-    // backgroundColor:'b'
+    borderRadius: 70,
+    justifyContent:'center'
+   },
+  rupee_icon:{
+    height:19,
+    width:12,
+    marginRight:3
+  },
+  card_text_container:{
+    width:170,
+    // borderWidth:2
+  },
+  card_text_view:{
+    flexDirection:'row',
+    alignItems: 'center',
+    marginVertical: 6,
+    marginHorizontal: 8,
+  },
+  card_text: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'black',
+    // borderWidth:2
+  },
+  btn_container_view:{
+    // borderWidth:2,
+    justifyContent: 'center',
+    // alignItems: 'center',
   },
   btn_view: {
-    marginLeft: 10
-  }
+    // marginLeft: 10,
+    // borderWidth:2,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // backgroundColor:'green',
+    borderRadius:15
+  },
+  plus_icon:{
+    // fontSize:18,
+    // color:'black',
+    marginHorizontal:45,
+    // marginVertical:5,
+    // fontWeight:'700'
+  },
 });
