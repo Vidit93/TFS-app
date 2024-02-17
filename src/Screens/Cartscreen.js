@@ -293,12 +293,16 @@ export default function Cartscreen() {
 
 
   async function Checkout() {
+   if (cart!='') {
     if (radioId) {
       await AsyncStorage.setItem('Method', radioId);
       navigation.navigate('address',)
     } else {
       Alert.alert('select method first')
     }
+   } else {
+    Alert.alert('Add to cart first')
+   }
   }
 
   console.log('sum ki value', sum);

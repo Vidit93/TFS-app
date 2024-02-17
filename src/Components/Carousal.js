@@ -23,7 +23,7 @@ const Carousel = () => {
         autoplay
         circleLoop
         autoplayInterval={4000}
-        // sliderBoxHeight={200} // Set the height of the slider box
+        sliderBoxHeight={300} // Set the height of the slider box
         dotColor="#FFEE58" // Color of the pagination dots
         inactiveDotColor="#90A4AE" // Color of inactive pagination dots
         paginationBoxVerticalPadding={20} // Padding for pagination box
@@ -57,15 +57,15 @@ const styles = StyleSheet.create({
     cont:{
         // marginTop:10,
         // backgroundColor:'white'
-        width:w*.9,
-        height:h*.2,
-        borderRadius: 10,
+        width:w,
+        height:h*.25,
+        // borderRadius: 10,
         overflow:'hidden',
     },
     slider_box: {
-      width:w*.9,
-      height:h*.2,
-      borderRadius: 10,
+      width:w*.95,
+      height:h*.25,
+      // borderRadius: 10,
       overflow: 'hidden', // Hide overflow content
       elevation: 5, // Elevation for shadow effect (Android)
       shadowColor: '#000', // Shadow color
@@ -77,9 +77,6 @@ const styles = StyleSheet.create({
       },
     },
     slider:{
-        // marginVertical:h*.012,
-        // marginHorizontal:w*.03,
-        
         overflow:'hidden',
         elevation:20,
         backgroundColor:'white'

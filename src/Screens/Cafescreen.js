@@ -10,14 +10,17 @@ export default function Cafescreen() {
 
     const navigation = useNavigation();
     const [food, setFood] = useState([]);
+    const [foodimg, setFoodimg] = useState([]);
 
     useEffect(() => {
         getData();
+        getimgData();
         const update = firestore()
             .collection('cart')
             .doc('9414419911')
             .onSnapshot(() => {
-                getData()
+                // getData();
+                // getimgData();
             });
         return () => {
             update();
@@ -50,20 +53,47 @@ export default function Cafescreen() {
         }
     };
 
+    const getimgData = async () => {
+        console.log("getData me aaya");
+        try {
+            const document = await firestore().collection('Food-img').doc('rbLNDwt6zbqSrLQjYSGa').get();
+            const data = document._data;
+            console.log('sara data ye he', data);
+    
+            const filteredFood = Object.keys(data || {}).map(category => ({
+                category,
+                img: data[category] || null 
+            }));
+    
+            setFoodimg(filteredFood);
+            console.log("Filtered food data", filteredFood);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
+
     function Menupage(item) {
         navigation.navigate("menu", { ...item });
     }
 
 
-    const renderFoodItem = ({ item }) => (
-        <TouchableOpacity onPress={() => Menupage(item)} >
-            <View style={styles.box_container_view}>
-                <View style={styles.box_text_view}>
-                    <Text style={styles.box_text}>{item.category}</Text>
+    const renderFoodItem = ({ item }) => {
+        const matchedImgData = foodimg.find(imgItem => imgItem.category === item.category);
+        console.log("matched data", matchedImgData);
+    
+        return (
+            <TouchableOpacity onPress={() => Menupage(item)} >
+                <View >
+                    <View style={[styles.box_text_view, { backgroundImage: matchedImgData && matchedImgData.img ? `url(${matchedImgData.img})` : 'none' }]}>
+                        <Text style={styles.box_text}>{item.category}</Text>
+                    </View>
                 </View>
-            </View>
-        </TouchableOpacity>
-    );
+            </TouchableOpacity>
+        );
+    };
+    
+    
 
     function Fooditemshow() {
         return (<>
@@ -95,7 +125,7 @@ export default function Cafescreen() {
                         <Text style={styles.category_text}>FastFood Categories</Text>
                     </View> */}
                 </View>
-                <View>
+                <View style={styles.box_container_view}>
                     {Fooditemshow()}
                 </View>
             </View>
@@ -108,22 +138,26 @@ export default function Cafescreen() {
 const styles = StyleSheet.create({
 
     Container_view: {
-        // backgroundColor: 'red'
+        // backgroundColor: '#07afaa'
     },
     carousal_view: {
         alignSelf: 'center',
         // borderWidth: 2,
-        borderRadius: 12
+        borderRadius: 12,
+        // backgroundColor:"red"
     },
     top_text_view: {
-        borderColor: 'green',
+        // borderColor: 'green',
         // borderWidth: 2,
         // borderRadius: 10,
         marginBottom: 10,
-        // backgroundColor: 'orange',
+        // backgroundColor: '#07afaa',
         height: 60,
         justifyContent:"center",
         // alignItems:"center"
+        // backgroundColor:"#a0b1e7",
+        // paddingBottom:10
+        // flex:1
     },
     top_text: {
         fontSize: 20,
@@ -135,7 +169,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         // marginTop: 3,
         // backgroundColor: 'white',
-        height: 40,
+        // height: 40,
         // borderWidth: 2,
     },
     category_text: {
@@ -143,6 +177,9 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     box_container_view: {
+        backgroundColor:"white",
+        height:h,
+        paddingTop:5
     },
     box_text_view: {
         borderRadius: 10,
@@ -152,7 +189,7 @@ const styles = StyleSheet.create({
         height: 70,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
+        backgroundColor: '#07afaa',
         elevation: 7, // For shadow on Android
         shadowColor: '#000000', // Shadow color
         shadowOpacity: 0.2, // Shadow opacity
@@ -163,7 +200,8 @@ const styles = StyleSheet.create({
         shadowRadius: 4, // Shadow radius
       },
     box_text: {
-
+        color:"black",
+        fontWeight: '500',
     },
     category_view: {
         // borderWidth: 2,

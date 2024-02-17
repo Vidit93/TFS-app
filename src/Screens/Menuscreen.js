@@ -243,4 +243,60 @@ const styles = StyleSheet.create({
     // marginVertical:5,
     // fontWeight:'700'
   },
+  card_view: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  card_image_view: {
+    marginRight: 16,
+  },
+  card_image: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+  },
+  card_text_container: {
+    flex: 1,
+  },
+  card_text_view: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  card_text: {
+    fontSize: 16,
+    color: '#333',
+  },
+  rupee_icon: {
+    width: 20,
+    height: 20,
+    marginRight: 4,
+  },
+  btn_container_view: {
+    backgroundColor: '#4CAF50',
+    borderRadius: 20,
+  },
+  btn_view: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  plus_icon: {
+    width: 24,
+    height: 24,
+    tintColor: '#fff',
+  },
 });
