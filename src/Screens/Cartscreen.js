@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Alert, ScrollView, Dimensions
+  Alert, ScrollView, Dimensions,RefreshControl
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import RadioGroup from 'react-native-radio-buttons-group';
@@ -25,6 +25,7 @@ export default function Cartscreen() {
   const [cart, setcart] = useState([]);
   const [sum, setsum] = useState('');
   const [radioId, setradioId] = useState('');
+  const [refresh, setrefresh] = useState(false)
   const navigation = useNavigation();
 
 
@@ -35,23 +36,50 @@ export default function Cartscreen() {
   useEffect(() => {
     getData();
     console.log('cart ka data', cart);
-    const update = firestore()
-      .collection('cart')
-      .doc('9414419911')
-      .onSnapshot(() => {
-        getData()
-      });
+   Cartupdate();
     return () => {
-      update();
+      // update();
+      Cartupdate();
     };
   }, []);
 
+  const Pullme = () => {
+    setrefresh(true);
+    // console.log("shuru hua");
+    try {
+        Promise.all([Cartupdate(),getData()]).then(() => {
+            setrefresh(false);
+            // renderCartItem()
+            Cartupdate();
+            getData();
+        });
+    } catch (error) {
+        console.error("Error in pull to refresh:", error);
+        setrefresh(false);
+        // renderCartItem()
+        Cartupdate();
+        getData();
+    }
+};
+
+  async function Cartupdate(){
+    const phn = await AsyncStorage.getItem('PHN');
+    
+     firestore()
+        .collection('cart')
+        .doc(phn)
+        .onSnapshot(() => {
+            getData();
+        });
+}
+
   const getData = async () => {
     console.log('getData me aaya');
+    const phn = await AsyncStorage.getItem('PHN');
     try {
       const document = await firestore()
         .collection('cart')
-        .doc('9414419911')
+        .doc(phn)
         .get();
       const data = document._data.products;
       console.log('sara data ye he', data);
@@ -78,10 +106,12 @@ export default function Cartscreen() {
   async function Minusqty(item) {
     var q = item.qty;
     // console.log('qty function ke under',q);
+    const phn = await AsyncStorage.getItem('PHN');
     if (q > 1) {
       try {
         // console.log('try ke under aya');
-        const userId = '9414419911';
+        // const userId = '9414419911';
+        const userId = phn;
         const cartRef = firestore().collection('cart').doc(userId);
         const cartDoc = await cartRef.get();
 
@@ -119,11 +149,13 @@ export default function Cartscreen() {
   }
 
   async function Plusqty(item) {
+    const phn = await AsyncStorage.getItem('PHN');
     var q = item.qty;
     if (q < 15) {
       try {
         // console.log('try ke under aya');
-        const userId = '9414419911';
+        // const userId = '9414419911';
+        const userId = phn;
         const cartRef = firestore().collection('cart').doc(userId);
         const cartDoc = await cartRef.get();
 
@@ -162,8 +194,10 @@ export default function Cartscreen() {
 
 
   async function Deleteitem(item) {
+    const phn = await AsyncStorage.getItem('PHN');
     try {
-      const userId = '9414419911';
+      const userId = phn;
+      // const userId = '9414419911';
       const cartRef = firestore().collection('cart').doc(userId);
       const cartDoc = await cartRef.get();
 
@@ -186,41 +220,41 @@ export default function Cartscreen() {
     return (
       <>
         <View style={styles.card_view} >
-          <View style={styles.card_image_view}>
-            <Image source={{ uri: food.img }} style={styles.card_image} />
-          </View>
-          <View style={styles.card_content}>
-            <View style={styles.card_text_container}>
-              <View style={styles.card_text_view}>
-                <Text style={styles.card_text}>{food.name}</Text>
-              </View>
-              <View style={styles.card_text_view}>
-                <Image source={rupee} style={styles.rupee_icon} />
-                <Text style={styles.card_text}>{food.rate}</Text>
-              </View>
+        <View style={styles.card_image_view}>
+          <Image source={{ uri: food.img }} style={styles.card_image} />
+        </View>
+        <View style={styles.card_content}>
+          <View style={styles.card_text_container}>
+            <View style={styles.card_text_view}>
+              <Text style={styles.card_text}>{food.name}</Text>
             </View>
-            <View style={styles.btn_qty_view}>
-              <View style={styles.card_qty_view}>
-                <View style={styles.card_qty_content}>
-                  <TouchableOpacity onPress={() => Minusqty(item)}>
-                    <Image source={minus} style={styles.minus_icon} />
-                  </TouchableOpacity>
-                  <Text style={styles.qty_text}>{item.qty}</Text>
-                  <TouchableOpacity onPress={() => Plusqty(item)}>
-                    <Image source={plus} style={styles.plus_icon} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View>
-                <TouchableOpacity onPress={() => Deleteitem(item)}>
-                  <View style={styles.btn_view}>
-                    <Image source={delete1} style={styles.delete_icon} />
-                  </View>
+            <View style={styles.card_text_view}>
+              <Image source={rupee} style={styles.rupee_icon} />
+              <Text style={styles.card_text}>{food.rate}</Text>
+            </View>
+          </View>
+          <View style={styles.btn_qty_view}>
+            <View style={styles.card_qty_view}>
+              <View style={styles.card_qty_content}>
+                <TouchableOpacity onPress={() => Minusqty(item)}>
+                  <Image source={minus} style={styles.minus_icon} />
+                </TouchableOpacity>
+                <Text style={styles.qty_text}>{item.qty}</Text>
+                <TouchableOpacity onPress={() => Plusqty(item)}>
+                  <Image source={plus} style={styles.plus_icon} />
                 </TouchableOpacity>
               </View>
             </View>
+            <View>
+              <TouchableOpacity onPress={() => Deleteitem(item)}>
+                <View style={styles.btn_view}>
+                  <Image source={delete1} style={styles.delete_icon} />
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
+      </View> 
       </>
     );
   }
@@ -232,6 +266,7 @@ export default function Cartscreen() {
           data={cart}
           renderItem={renderCartItem}
           keyExtractor={item => item.Id}
+          refreshControl={<RefreshControl refreshing={refresh} onRefresh={Pullme} />}
         />
       </View>
     </>)
@@ -295,8 +330,17 @@ export default function Cartscreen() {
   async function Checkout() {
    if (cart!='') {
     if (radioId) {
+      console.log('radioid ka raaz',radioId);
       await AsyncStorage.setItem('Method', radioId);
-      navigation.navigate('address',)
+      if (radioId == '1' || radioId == '2') {
+        navigation.navigate('address',{ Refresh: Pullme})
+      } else {
+        if (radioId == '3' && sum> 100) {
+          navigation.navigate('address',{ Refresh: Pullme})
+        } else {
+          Alert.alert('Oder Should be of minimum 100 Rupees')
+        }
+      }
     } else {
       Alert.alert('select method first')
     }
@@ -323,7 +367,7 @@ export default function Cartscreen() {
             </View>
           </View>
           <View style={styles.cart_view}>
-            {Cartitemshow()}
+            {cart && Cartitemshow()}
           </View>
           <View style={styles.bottom_container_view}>
             <View style={styles.subtotal_container_view}>

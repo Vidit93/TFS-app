@@ -6,6 +6,7 @@ import arrow from '../Images/back.png'
 import cart from '../Images/cart1.png'
 import rupee from '../Images/rupee.png'
 import plus from '../Images/plus.png'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const w = Dimensions.get('screen').width;
 const h = Dimensions.get('screen').height;
@@ -27,12 +28,14 @@ export default function MenuScreen({ navigation }) {
     navigation.goBack()
   }
   function Cartbutton() {
-    navigation.navigate('cart')
+    navigation.navigate('Cart')
   }
 
   const addToCart = async (item) => {
+    const phn = await AsyncStorage.getItem('PHN');
     try {
-      const userId = '9414419911';
+      // const userId = '9414419911';
+      const userId = phn;
       const cartRef = firestore().collection('cart').doc(userId);
       const cartDoc = await cartRef.get();
 

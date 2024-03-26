@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, FlatList, TouchableOpacity, StyleSheet, Dimensions, ImageBackground } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Carousel from "../Components/Carousal";
 const h = Dimensions.get('window').height;
 const w = Dimensions.get('window').width;
@@ -14,18 +15,23 @@ export default function Cafescreen() {
 
     useEffect(() => {
         getData();
-        getimgData();
-        const update = firestore()
-            .collection('cart')
-            .doc('9414419911')
-            .onSnapshot(() => {
-                // getData();
-                // getimgData();
-            });
+       Cartupdate();
         return () => {
-            update();
+            // update();
+            Cartupdate();
         };
     }, []);
+
+    async function Cartupdate(){
+        const phn = await AsyncStorage.getItem('PHN');
+        
+         firestore()
+            .collection('cart')
+            .doc(phn)
+            .onSnapshot(() => {
+                getData();
+            });
+    }
 
     const getData = async () => {
         console.log("getData me aaya");
@@ -53,28 +59,33 @@ export default function Cafescreen() {
         }
     };
 
-    const getimgData = async () => {
-        console.log("getData me aaya");
-        try {
-            const document = await firestore().collection('Food-img').doc('rbLNDwt6zbqSrLQjYSGa').get();
-            const data = document._data;
-            console.log('sara data ye he', data);
+    // const getimgData = async () => {
+    //     console.log("getData me aaya");
+    //     try {
+    //         const document = await firestore().collection('Food-img').doc('rbLNDwt6zbqSrLQjYSGa').get();
+    //         const data = document._data;
+    //         console.log('sara data ye he', data);
     
-            const filteredFood = Object.keys(data || {}).map(category => ({
-                category,
-                img: data[category] || null 
-            }));
+    //         const filteredFood = Object.keys(data || {}).map(category => ({
+    //             category,
+    //             img: data[category] || null 
+    //         }));
     
-            setFoodimg(filteredFood);
-            console.log("Filtered food data", filteredFood);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    //         setFoodimg(filteredFood);
+    //         console.log("Filtered food data", filteredFood);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
     
 
-    function Menupage(item) {
+    async function Menupage(item) {
+        const phn = await AsyncStorage.getItem('PHN');
+       if (phn) {
         navigation.navigate("menu", { ...item });
+       } else {
+        navigation.navigate("verification");
+       }
     }
 
 

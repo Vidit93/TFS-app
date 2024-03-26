@@ -3,6 +3,9 @@ import { Text, View, FlatList, TouchableOpacity, StyleSheet, Dimensions, ImageBa
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import Carousel from "../Components/Carousal";
+import LottieView from 'lottie-react-native';
+import PushNotification from "react-native-push-notification";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const h = Dimensions.get('window').height;
 const w = Dimensions.get('window').width;
 
@@ -11,21 +14,58 @@ export default function Cafescreen() {
     const navigation = useNavigation();
     const [food, setFood] = useState([]);
     const [foodimg, setFoodimg] = useState([]);
+    const [loading, setloading] = useState(false);
 
     useEffect(() => {
         getData();
-        getimgData();
-        const update = firestore()
+        Createchannel();
+        const timeout = setTimeout(() => {
+            setloading(true);
+          }, 2300);
+        Cartupdate();
+        return () => {
+            // update();
+            Cartupdate();
+            clearTimeout(timeout);
+        };
+        //   return () => clearTimeout(timeout);
+    }, []);
+
+    async function Cartupdate(){
+        const phn = await AsyncStorage.getItem('PHN');
+        
+         firestore()
             .collection('cart')
-            .doc('9414419911')
+            .doc(phn)
             .onSnapshot(() => {
-                // getData();
+                getData();
                 // getimgData();
             });
-        return () => {
-            update();
-        };
-    }, []);
+    }
+    function Createchannel() {
+        PushNotification.createChannel(
+          {
+            channelId: 'channel-id',
+            channelName: 'Channel Name',
+            channelDescription: 'Channel Description',
+            playSound: true,
+            soundName: 'default',
+            importance: 4,
+            vibrate: true,
+          },
+          // (created) => console.log(`Channel created: ${created}`),
+        );
+      }
+
+    function Animation() {
+        return (
+            <>
+                <View style={{flex:1}}>
+                    <LottieView style={{ width: w, height: h }} source={require('../Animations/Animation1.json')} autoPlay loop />
+                </View>
+            </>
+        )
+    }
 
     const getData = async () => {
         console.log("getData me aaya");
@@ -53,35 +93,20 @@ export default function Cafescreen() {
         }
     };
 
-    const getimgData = async () => {
-        console.log("getData me aaya");
-        try {
-            const document = await firestore().collection('Food-img').doc('rbLNDwt6zbqSrLQjYSGa').get();
-            const data = document._data;
-            console.log('sara data ye he', data);
-    
-            const filteredFood = Object.keys(data || {}).map(category => ({
-                category,
-                img: data[category] || null 
-            }));
-    
-            setFoodimg(filteredFood);
-            console.log("Filtered food data", filteredFood);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    
-
-    function Menupage(item) {
+    async function Menupage(item) {
+        const phn = await AsyncStorage.getItem('PHN');
+       if (phn) {
         navigation.navigate("menu", { ...item });
+       } else {
+        navigation.navigate("verification");
+       }
     }
 
 
     const renderFoodItem = ({ item }) => {
         const matchedImgData = foodimg.find(imgItem => imgItem.category === item.category);
         console.log("matched data", matchedImgData);
-    
+
         return (
             <TouchableOpacity onPress={() => Menupage(item)} >
                 <View >
@@ -92,8 +117,8 @@ export default function Cafescreen() {
             </TouchableOpacity>
         );
     };
-    
-    
+
+
 
     function Fooditemshow() {
         return (<>
@@ -110,25 +135,28 @@ export default function Cafescreen() {
 
     return (
         <>
+           {loading? 
             <View style={styles.Container_view}>
-                <View style={styles.top_view}>
-                    <View style={styles.top_text_view}>
-                        <Text style={styles.top_text}>Discover new </Text>
-                        <Text style={styles.top_text}>Delicious just for you!</Text>
-                    </View>
-                </View>
-                <View style={styles.carousal_view}>
-                    {Carousel()}
-                </View>
-                <View style={styles.category_text_view}>
-                    {/* <View style={styles.category_text_view}>
-                        <Text style={styles.category_text}>FastFood Categories</Text>
-                    </View> */}
-                </View>
-                <View style={styles.box_container_view}>
-                    {Fooditemshow()}
+            <View style={styles.top_view}>
+                <View style={styles.top_text_view}>
+                    <Text style={styles.top_text}>Discover new </Text>
+                    <Text style={styles.top_text}>Delicious just for you!</Text>
                 </View>
             </View>
+            <View style={styles.carousal_view}>
+                {Carousel()}
+            </View>
+            <View style={styles.category_text_view}>
+                {/* <View style={styles.category_text_view}>
+                    <Text style={styles.category_text}>FastFood Categories</Text>
+                </View> */}
+            </View>
+            <View style={styles.box_container_view}>
+                {Fooditemshow()}
+            </View>
+        </View>
+        :
+        Animation()}
 
         </>
     );
@@ -153,7 +181,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         // backgroundColor: '#07afaa',
         height: 60,
-        justifyContent:"center",
+        justifyContent: "center",
         // alignItems:"center"
         // backgroundColor:"#a0b1e7",
         // paddingBottom:10
@@ -177,9 +205,9 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     box_container_view: {
-        backgroundColor:"white",
-        height:h,
-        paddingTop:5
+        backgroundColor: "white",
+        height: h,
+        paddingTop: 5
     },
     box_text_view: {
         borderRadius: 10,
@@ -194,13 +222,13 @@ const styles = StyleSheet.create({
         shadowColor: '#000000', // Shadow color
         shadowOpacity: 0.2, // Shadow opacity
         shadowOffset: {
-          width: 0, // Horizontal shadow offset
-          height: 2, // Vertical shadow offset
+            width: 0, // Horizontal shadow offset
+            height: 2, // Vertical shadow offset
         },
         shadowRadius: 4, // Shadow radius
-      },
+    },
     box_text: {
-        color:"black",
+        color: "black",
         fontWeight: '500',
     },
     category_view: {

@@ -11,14 +11,17 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
+import { OrderNotification } from '../Notifications/Notifications';
+import PushNotification from "react-native-push-notification";
 const h = Dimensions.get('window').height;
 const w = Dimensions.get('window').width;
 // <===================================================================Import-Section-End===================================================================================>
 
 
 // <===================================================================Logic-Section-Start===================================================================================>
-export default function AddressScreen({ navigation }) {
+export default function AddressScreen({ navigation,route }) {
 
+    const { Refresh} = route.params;
     const [fname, setfname] = useState('')
     const [lname, setlname] = useState('')
     const [table, settable] = useState('')
@@ -28,23 +31,30 @@ export default function AddressScreen({ navigation }) {
     const [method, setmethod] = useState('')
     const [cart, setcart] = useState([]);
     const [sum, setsum] = useState('');
-
+    const [WTSP, setWTSP] = useState('');
 
     useEffect(() => {
         Getdata()
-        const update = firestore()
-            .collection('cart')
-            .doc('9414419911')
-            .onSnapshot(() => {
-                Getdata()
-            });
+        Cartupdate();
         return () => {
-            update();
+            // update();
+            Cartupdate();
         };
     }, [])
 
-    async function OrderDinein() {
+    async function Cartupdate(){
+        const phn = await AsyncStorage.getItem('PHN');
+        
+         firestore()
+            .collection('cart')
+            .doc(phn)
+            .onSnapshot(() => {
+                Getdata();
+            });
+    }
 
+    async function OrderDinein() {
+        const phn = await AsyncStorage.getItem('PHN');
         if (fname && lname && table) {
             try {
                 const messageBody = cart.map(item => (
@@ -57,16 +67,18 @@ export default function AddressScreen({ navigation }) {
 
                 const MSG = [message, 'Contact Details:-', 'Name:- ' + fname + ' ' + lname, 'Table Number:- ' + table, 'Instructions:- ' + note,].join('\n\n')
 
-                const phoneNumber = '+919950110025';
+                const phoneNumber = '+91'+WTSP;
 
                 const whatsappURL = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(MSG)}`;
                 console.log('timer shuru');
                 setTimeout(() => {
                     console.log('delete ke liye time khtm');
-                    DeleteCart('9414419911');
+                    DeleteCart(phn);
+                    Refresh();
                 }, 5000);
-
+                OrderNotification()
                 Linking.openURL(whatsappURL);
+                navigation.navigate('Fast Food')
             } catch (error) {
                 console.error('Error sending WhatsApp message:', error);
             }
@@ -76,6 +88,7 @@ export default function AddressScreen({ navigation }) {
 
     }
     async function OrderTakeaway() {
+        const phn = await AsyncStorage.getItem('PHN');
         if (fname && lname && number.length > 9) {
             try {
                 const messageBody = cart.map(item => (
@@ -88,14 +101,16 @@ export default function AddressScreen({ navigation }) {
 
                 const MSG = [message, 'Contact Details:-', 'Name:- ' + fname + ' ' + lname, 'Phone Number:- ' + number, 'Instructions:- ' + note, 'Mode:- ' + 'TakeAway Order'].join('\n\n')
 
-                const phoneNumber = '+919950110025';
+                const phoneNumber = '+91'+WTSP;
 
                 const whatsappURL = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(MSG)}`;
                 setTimeout(() => {
-                    DeleteCart('9414419911');
+                    DeleteCart(phn);
+                    Refresh();
                 }, 5000);
-
+                OrderNotification()
                 Linking.openURL(whatsappURL);
+                navigation.navigate('Fast Food')
             } catch (error) {
                 console.error('Error sending WhatsApp message:', error);
             }
@@ -105,7 +120,8 @@ export default function AddressScreen({ navigation }) {
 
     }
     async function OrderDelivery() {
-        if (fname && lname && table && number.length > 9 && address) {
+        const phn = await AsyncStorage.getItem('PHN');
+        if (fname && lname  && number.length > 9 && address) {
             try {
                 const messageBody = cart.map(item => (
                     ` Name: ${item.productData.name}, 
@@ -117,14 +133,16 @@ export default function AddressScreen({ navigation }) {
 
                 const MSG = [message, 'Contact Details:-', 'Name:- ' + fname + ' ' + lname, 'Phone Number:- ' + number, 'Address:- ' + address, 'Instructions:- ' + note, 'Mode:- ' + 'Delivery Order'].join('\n\n')
 
-                const phoneNumber = '+919950110025';
+                const phoneNumber = '+91'+WTSP;
 
                 const whatsappURL = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(MSG)}`;
                 setTimeout(() => {
-                    DeleteCart('9414419911');
+                    DeleteCart(phn);
+                    Refresh();
                 }, 5000);
-
+                OrderNotification()
                 Linking.openURL(whatsappURL);
+                navigation.navigate('Fast Food')
             } catch (error) {
                 console.error('Error sending WhatsApp message:', error);
             }
@@ -137,7 +155,6 @@ export default function AddressScreen({ navigation }) {
     const DeleteCart = async (documentId) => {
         console.log('delete function me aa gya');
         try {
-            // Delete the document with the provided ID from 'cart' collection
             await firestore().collection('cart').doc(documentId).delete();
 
             console.log(`Document with ID ${documentId} deleted successfully`);
@@ -149,13 +166,22 @@ export default function AddressScreen({ navigation }) {
 
     async function Getdata() {
         const method = await AsyncStorage.getItem('Method');
+        const phn = await AsyncStorage.getItem('PHN');
         setmethod(method)
 
         console.log('getData me aaya');
         try {
+
+            const wtspNumber = await firestore()
+                .collection('Whatsapp_Number')
+                .doc('IeMxNqvGBnD1DqoxSMaU')
+                .get();
+                const wtsp = wtspNumber._data.Number
+                setWTSP(wtsp)
+                console.log("wtsp ka document ka data",wtsp);
             const document = await firestore()
                 .collection('cart')
-                .doc('9414419911')
+                .doc(phn)
                 .get();
             const data = document._data.products;
             console.log('sara data ye he', data);
