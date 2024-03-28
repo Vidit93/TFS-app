@@ -47,7 +47,7 @@ export default function PhoneNumberValidation() {
             Alert.alert('Valid Phone Number', 'The entered phone number is valid.');
             const otp = await AsyncStorage.getItem('OTP');
             await AsyncStorage.setItem('PHN', phoneNumber);
-            console.log("func ke under ki otp", otp);
+            // console.log("func ke under ki otp", otp);
             // console.log("func ke under ka number",phoneNumber);
             // sendOtpViaSMS(phoneNumber, otp);
             OTPNotification(otp);
@@ -107,19 +107,19 @@ export default function PhoneNumberValidation() {
 
     async function generateOTP() {
         const otp = Math.floor(1000 + Math.random() * 9000);
-        console.log("Generated OTP:", otp);
+        // console.log("Generated OTP:", otp);
         const otp1 = otp.toString();
         await AsyncStorage.setItem('OTP', otp1);
-        console.log("Generated OTP1:", otp1);
+        // console.log("Generated OTP1:", otp1);
     }
 
     const handleOtpVerification = async () => {
         // const OTP = 
         const votp = await AsyncStorage.getItem('OTP');
-        console.log('Verifying OTP:', OTP);
+        // console.log('Verifying OTP:', OTP);
         const otpString = OTP.join('');
-        console.log(otpString);
-        console.log('Verifying votp:', votp);
+        // console.log(otpString);
+        // console.log('Verifying votp:', votp);
         if (otpString === votp) {
             navigation.navigate('cafe')
         } else {
@@ -132,7 +132,7 @@ export default function PhoneNumberValidation() {
         const newOtp = [...OTP];
         newOtp[index] = value;
         setOtp(newOtp);
-        console.log("array vali otp", newOtp);
+        // console.log("array vali otp", newOtp);
         if (value && index < 3) {
             // Move focus to the next input field
             refs[index + 1].focus();

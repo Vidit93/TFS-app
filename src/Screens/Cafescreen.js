@@ -24,11 +24,9 @@ export default function Cafescreen() {
           }, 2300);
         Cartupdate();
         return () => {
-            // update();
             Cartupdate();
             clearTimeout(timeout);
         };
-        //   return () => clearTimeout(timeout);
     }, []);
 
     async function Cartupdate(){
@@ -72,7 +70,7 @@ export default function Cafescreen() {
         try {
             const document = await firestore().collection('Food').doc('aAeGIMjidxg3uiv6hkwi').get();
             const data = document._data;
-            console.log('sara data ye he', data);
+            // console.log('sara data ye he', data);
 
             const filteredFood = Object.keys(data || {}).map(category => ({
                 category,
@@ -87,7 +85,7 @@ export default function Cafescreen() {
             }));
 
             setFood(filteredFood);
-            console.log("Filtered food data", filteredFood);
+            // console.log("Filtered food data", filteredFood);
         } catch (error) {
             console.log(error);
         }
@@ -104,13 +102,13 @@ export default function Cafescreen() {
 
 
     const renderFoodItem = ({ item }) => {
-        const matchedImgData = foodimg.find(imgItem => imgItem.category === item.category);
-        console.log("matched data", matchedImgData);
+        // const matchedImgData = foodimg.find(imgItem => imgItem.category === item.category);
+        // console.log("matched data", matchedImgData);
 
         return (
             <TouchableOpacity onPress={() => Menupage(item)} >
                 <View >
-                    <View style={[styles.box_text_view, { backgroundImage: matchedImgData && matchedImgData.img ? `url(${matchedImgData.img})` : 'none' }]}>
+                    <View style={styles.box_text_view}>
                         <Text style={styles.box_text}>{item.category}</Text>
                     </View>
                 </View>
@@ -212,13 +210,13 @@ const styles = StyleSheet.create({
     box_text_view: {
         borderRadius: 10,
         marginHorizontal: 20,
-        marginVertical: 8,
+        marginVertical: 17,
         width: 90,
         height: 70,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#07afaa',
-        elevation: 7, // For shadow on Android
+        elevation: 9, // For shadow on Android
         shadowColor: '#000000', // Shadow color
         shadowOpacity: 0.2, // Shadow opacity
         shadowOffset: {

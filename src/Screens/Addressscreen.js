@@ -34,6 +34,8 @@ export default function AddressScreen({ navigation,route }) {
     const [WTSP, setWTSP] = useState('');
 
     useEffect(() => {
+        console.log('route ka darta',route);
+        console.log('route ka under ka darta',route.params);
         Getdata()
         Cartupdate();
         return () => {
@@ -75,7 +77,7 @@ export default function AddressScreen({ navigation,route }) {
                     console.log('delete ke liye time khtm');
                     DeleteCart(phn);
                     Refresh();
-                }, 5000);
+                }, 2000);
                 OrderNotification()
                 Linking.openURL(whatsappURL);
                 navigation.navigate('Fast Food')
@@ -107,7 +109,7 @@ export default function AddressScreen({ navigation,route }) {
                 setTimeout(() => {
                     DeleteCart(phn);
                     Refresh();
-                }, 5000);
+                }, 2000);
                 OrderNotification()
                 Linking.openURL(whatsappURL);
                 navigation.navigate('Fast Food')
@@ -139,7 +141,7 @@ export default function AddressScreen({ navigation,route }) {
                 setTimeout(() => {
                     DeleteCart(phn);
                     Refresh();
-                }, 5000);
+                }, 2000);
                 OrderNotification()
                 Linking.openURL(whatsappURL);
                 navigation.navigate('Fast Food')
@@ -153,11 +155,11 @@ export default function AddressScreen({ navigation,route }) {
     }
 
     const DeleteCart = async (documentId) => {
-        console.log('delete function me aa gya');
+        // console.log('delete function me aa gya');
         try {
             await firestore().collection('cart').doc(documentId).delete();
 
-            console.log(`Document with ID ${documentId} deleted successfully`);
+            // console.log(`Document with ID ${documentId} deleted successfully`);
         } catch (error) {
             console.error('Error deleting document:', error);
         }
@@ -178,13 +180,13 @@ export default function AddressScreen({ navigation,route }) {
                 .get();
                 const wtsp = wtspNumber._data.Number
                 setWTSP(wtsp)
-                console.log("wtsp ka document ka data",wtsp);
+                // console.log("wtsp ka document ka data",wtsp);
             const document = await firestore()
                 .collection('cart')
                 .doc(phn)
                 .get();
             const data = document._data.products;
-            console.log('sara data ye he', data);
+            // console.log('sara data ye he', data);
 
             const extractedData = data.map(item => ({
                 Id: item.productId,
@@ -193,12 +195,12 @@ export default function AddressScreen({ navigation,route }) {
             }));
             setcart(extractedData);
             const total = extractedData.map(item => item.productData.rate * item.qty)
-            console.log('total sbka', total);
+            // console.log('total sbka', total);
             const sum = total.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
             setsum(sum);
-            console.log('total ka sum he ye', sum);
+            // console.log('total ka sum he ye', sum);
 
-            console.log('Filtered food data', extractedData);
+            // console.log('Filtered food data', extractedData);
         } catch (error) {
             console.log(error);
         }

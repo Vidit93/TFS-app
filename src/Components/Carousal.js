@@ -6,13 +6,10 @@ const w=Dimensions.get('screen').width
 const h=Dimensions.get('screen').height
 
 const image=[
-    // require('../images/images/photo1.png'),
-    // require('../images/images/photo2.png'),
-    // require('../images/images/photo3.png')
-    "https://source.unsplash.com/1024x768/?nature",
-    "https://source.unsplash.com/1024x768/?water",
-    "https://source.unsplash.com/1024x768/?girl",
-    "https://source.unsplash.com/1024x768/?tree",
+    require('../Images/img1.jpg'),
+    require('../Images/img2.jpg'),
+    require('../Images/img4.jpeg'),
+    // "https://in.pinterest.com/pin/543528248773059050/",
 ]
 const Carousel = () => {
   return (

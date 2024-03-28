@@ -101,7 +101,6 @@ export default function MenuScreen({ navigation }) {
         </View>
         <TouchableOpacity onPress={() => addToCart(item)}  style={styles.btn_container_view}>
           <View style={styles.btn_view}>
-            {/* <Text style={styles.btn_text}>Add To Cart</Text> */}
             <Image source={plus} style={styles.plus_icon} />
           </View>
         </TouchableOpacity>
@@ -173,9 +172,9 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   flatlist_view: {
-    // backgroundColor: 'red',
+    backgroundColor: 'red',
     marginTop: 55,
-    // borderWidth:2
+    // borderWidth:
   },
   foodcard_view: {
     backgroundColor: 'white',
@@ -192,8 +191,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     // elevation: 5,
     height:80,
-    borderRadius:15
-    // backgroundColor:''
+    borderRadius:15,
+    backgroundColor:'green'
   },
   card_image_view:{
     justifyContent:'center',

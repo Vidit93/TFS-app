@@ -38,7 +38,6 @@ export default function Cartscreen() {
     console.log('cart ka data', cart);
    Cartupdate();
     return () => {
-      // update();
       Cartupdate();
     };
   }, []);
@@ -46,19 +45,20 @@ export default function Cartscreen() {
   const Pullme = () => {
     setrefresh(true);
     // console.log("shuru hua");
-    try {
+    console.log('cart ka data', cart);
+    setcart([])
+    
+      try {
         Promise.all([Cartupdate(),getData()]).then(() => {
             setrefresh(false);
-            // renderCartItem()
             Cartupdate();
-            getData();
+            // getData();
         });
     } catch (error) {
         console.error("Error in pull to refresh:", error);
         setrefresh(false);
-        // renderCartItem()
         Cartupdate();
-        getData();
+        // getData();
     }
 };
 
@@ -82,7 +82,7 @@ export default function Cartscreen() {
         .doc(phn)
         .get();
       const data = document._data.products;
-      console.log('sara data ye he', data);
+      // console.log('sara data ye he', data);
 
       const extractedData = data.map(item => ({
         Id: item.productId,
@@ -91,12 +91,12 @@ export default function Cartscreen() {
       }));
       setcart(extractedData);
       const total = extractedData.map(item => item.productData.rate * item.qty)
-      console.log('total sbka', total);
+      // console.log('total sbka', total);
       const sum = total.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
       setsum(sum);
-      console.log('total ka sum he ye', sum);
+      // console.log('total ka sum he ye', sum);
 
-      console.log('Filtered food data', extractedData);
+      // console.log('Filtered food data', extractedData);
     } catch (error) {
       console.log(error);
     }
@@ -330,7 +330,7 @@ export default function Cartscreen() {
   async function Checkout() {
    if (cart!='') {
     if (radioId) {
-      console.log('radioid ka raaz',radioId);
+      // console.log('radioid ka raaz',radioId);
       await AsyncStorage.setItem('Method', radioId);
       if (radioId == '1' || radioId == '2') {
         navigation.navigate('address',{ Refresh: Pullme})
@@ -349,7 +349,7 @@ export default function Cartscreen() {
    }
   }
 
-  console.log('sum ki value', sum);
+  // console.log('sum ki value', sum);
   return (
     <>
       {cart ?
@@ -367,7 +367,7 @@ export default function Cartscreen() {
             </View>
           </View>
           <View style={styles.cart_view}>
-            {cart && Cartitemshow()}
+            {Cartitemshow()}
           </View>
           <View style={styles.bottom_container_view}>
             <View style={styles.subtotal_container_view}>
