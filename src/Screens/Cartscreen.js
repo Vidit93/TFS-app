@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Alert, ScrollView, Dimensions,RefreshControl
+  Alert, ScrollView, Dimensions,RefreshControl,StatusBar
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import RadioGroup from 'react-native-radio-buttons-group';
@@ -47,7 +47,7 @@ export default function Cartscreen() {
     // console.log("shuru hua");
     console.log('cart ka data', cart);
     setcart([])
-    
+    setsum('')
       try {
         Promise.all([Cartupdate(),getData()]).then(() => {
             setrefresh(false);
@@ -352,6 +352,7 @@ export default function Cartscreen() {
   // console.log('sum ki value', sum);
   return (
     <>
+    <StatusBar backgroundColor="#a0b1e7" />
       {cart ?
         <View style={styles.container_view}>
           <View style={styles.buttonview}>
@@ -403,7 +404,6 @@ export default function Cartscreen() {
               </View>
             </TouchableOpacity>
           </View>
-
         </View> :
         <View>
           <Text>Empty cart</Text>

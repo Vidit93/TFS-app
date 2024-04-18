@@ -29,8 +29,8 @@ export const OTPNotification = async (otp) => {
   try {
     PushNotification.localNotificationSchedule({
     channelId: 'channel-id',
-    title: "OTP Verification", 
-    message: `Your OTP for verification is: ${otp}`, 
+    title: "🔒OTP Verification🔒", 
+    message: `Your OTP for verification is: 🔑${otp}🔑`, 
     date: new Date(Date.now()),
       allowWhileIdle: true,
     // repeatType: "day",
@@ -44,8 +44,8 @@ export const OrderNotification = async () => {
   try {
     PushNotification.localNotificationSchedule({
     channelId: 'channel-id',
-    title: "ORDER PLACED 🎉", 
-    message: "Your order has been successfully placed! 🎉 Thank you for choosing The Food Station. Your delicious meal will be on its way shortly. Bon appétit!🎉", 
+    title: "ORDER PLACED✨", 
+    message: "Your order has been successfully placed! 🎉 Thank you for choosing 🍔The Food Station🍔. Your delicious meal will be on its way shortly. Bon appétit!🍕😋", 
     date: new Date(Date.now()),
       allowWhileIdle: true,
     // repeatType: "day",

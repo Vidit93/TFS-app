@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, FlatList, Image, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import {StatusBar,Text, View, FlatList, Image, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore';
 import arrow from '../Images/back.png'
@@ -16,13 +16,8 @@ export default function MenuScreen({ navigation }) {
   const { category, itemDetails } = route.params;
   const details = itemDetails.map(item => item.details);
 
-  useEffect(() => {
-    // console.log("category ka data", category);
-    // console.log("route ka data", route);
-    // console.log("items ka data", itemDetails);
-    // console.log("items ka data filter ke bad", details);
-    // console.log('cart ka data add ke bad', cart);
-  }, []);
+  // useEffect(() => {
+  // }, []);
 
   function Backbutton() {
     navigation.goBack()
@@ -110,6 +105,7 @@ export default function MenuScreen({ navigation }) {
 
   return (
     <>
+    <StatusBar backgroundColor="#07afaa" />
       <View style={styles.container_view}>
         <View style={styles.buttonview}>
           <View>
@@ -172,13 +168,13 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   flatlist_view: {
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     marginTop: 55,
     // borderWidth:
   },
   foodcard_view: {
     backgroundColor: 'white',
-    height: h,
+    height: h*.8,
     borderTopLeftRadius: 100,
     // marginLeft:2,
     // borderWidth:2,

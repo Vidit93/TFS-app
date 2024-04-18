@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity, StyleSheet, Dimensions, ImageBackground } from "react-native";
+import { StatusBar,Text, View, FlatList, TouchableOpacity, StyleSheet, Dimensions, ImageBackground } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,7 +11,7 @@ export default function Cafescreen() {
 
     const navigation = useNavigation();
     const [food, setFood] = useState([]);
-    const [foodimg, setFoodimg] = useState([]);
+    // const [foodimg, setFoodimg] = useState([]);
 
     useEffect(() => {
         getData();
@@ -121,6 +121,7 @@ export default function Cafescreen() {
 
     return (
         <>
+        <StatusBar backgroundColor="#fff" />
             <View style={styles.Container_view}>
                 <View style={styles.top_view}>
                     <View style={styles.top_text_view}>
@@ -149,7 +150,7 @@ export default function Cafescreen() {
 const styles = StyleSheet.create({
 
     Container_view: {
-        // backgroundColor: '#07afaa'
+        backgroundColor: '#fff'
     },
     carousal_view: {
         alignSelf: 'center',
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
         // borderWidth: 2,
         // borderRadius: 10,
         marginBottom: 10,
-        // backgroundColor: '#07afaa',
+        backgroundColor: '#fff',
         height: 60,
         justifyContent:"center",
         // alignItems:"center"
@@ -190,18 +191,18 @@ const styles = StyleSheet.create({
     box_container_view: {
         backgroundColor:"white",
         height:h,
-        paddingTop:5
+        paddingTop:5,
     },
     box_text_view: {
         borderRadius: 10,
-        marginHorizontal: 20,
-        marginVertical: 8,
-        width: 90,
+        marginHorizontal: 18,
+        marginVertical: 17,
+        width: 95,
         height: 70,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#07afaa',
-        elevation: 7, // For shadow on Android
+        elevation: 9, // For shadow on Android
         shadowColor: '#000000', // Shadow color
         shadowOpacity: 0.2, // Shadow opacity
         shadowOffset: {

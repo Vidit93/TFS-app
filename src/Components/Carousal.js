@@ -6,10 +6,11 @@ const w=Dimensions.get('screen').width
 const h=Dimensions.get('screen').height
 
 const image=[
-    require('../Images/img1.jpg'),
-    require('../Images/img2.jpg'),
-    require('../Images/img4.jpeg'),
-    // "https://in.pinterest.com/pin/543528248773059050/",
+    // require('../Images/img1.jpg'),
+    // require('../Images/img2.jpg'),
+    // require('../Images/img4.jpeg'),
+    "https://firebasestorage.googleapis.com/v0/b/fs-app-ba1e0.appspot.com/o/Carousel%20Image%2FDesigner%20(5).png?alt=media&token=10c53b20-f190-4053-bab4-629588ece447",
+    "https://firebasestorage.googleapis.com/v0/b/fs-app-ba1e0.appspot.com/o/Carousel%20Image%2FDesigner.png?alt=media&token=ca94cb9a-e756-4f96-ac32-2b7d0b17ef58",
 ]
 const Carousel = () => {
   return (
@@ -53,7 +54,7 @@ export default Carousel
 const styles = StyleSheet.create({
     cont:{
         // marginTop:10,
-        // backgroundColor:'white'
+        backgroundColor:'white',
         width:w,
         height:h*.25,
         // borderRadius: 10,
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
       width:w*.95,
       height:h*.25,
       // borderRadius: 10,
+      backgroundColor:'white',
       overflow: 'hidden', // Hide overflow content
       elevation: 5, // Elevation for shadow effect (Android)
       shadowColor: '#000', // Shadow color

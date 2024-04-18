@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity, StyleSheet, Dimensions, ImageBackground } from "react-native";
+import { StatusBar ,Text, View, FlatList, TouchableOpacity, StyleSheet, Dimensions, ImageBackground } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import Carousel from "../Components/Carousal";
@@ -37,7 +37,6 @@ export default function Cafescreen() {
             .doc(phn)
             .onSnapshot(() => {
                 getData();
-                // getimgData();
             });
     }
     function Createchannel() {
@@ -58,6 +57,7 @@ export default function Cafescreen() {
     function Animation() {
         return (
             <>
+            <StatusBar backgroundColor="#FAF9F6" />
                 <View style={{flex:1}}>
                     <LottieView style={{ width: w, height: h }} source={require('../Animations/Animation1.json')} autoPlay loop />
                 </View>
@@ -71,7 +71,6 @@ export default function Cafescreen() {
             const document = await firestore().collection('Food').doc('aAeGIMjidxg3uiv6hkwi').get();
             const data = document._data;
             // console.log('sara data ye he', data);
-
             const filteredFood = Object.keys(data || {}).map(category => ({
                 category,
                 // items: Object.keys(data[category] || {}),
@@ -102,9 +101,6 @@ export default function Cafescreen() {
 
 
     const renderFoodItem = ({ item }) => {
-        // const matchedImgData = foodimg.find(imgItem => imgItem.category === item.category);
-        // console.log("matched data", matchedImgData);
-
         return (
             <TouchableOpacity onPress={() => Menupage(item)} >
                 <View >
@@ -133,6 +129,7 @@ export default function Cafescreen() {
 
     return (
         <>
+        <StatusBar backgroundColor="#ffff" />
            {loading? 
             <View style={styles.Container_view}>
             <View style={styles.top_view}>
@@ -145,9 +142,6 @@ export default function Cafescreen() {
                 {Carousel()}
             </View>
             <View style={styles.category_text_view}>
-                {/* <View style={styles.category_text_view}>
-                    <Text style={styles.category_text}>FastFood Categories</Text>
-                </View> */}
             </View>
             <View style={styles.box_container_view}>
                 {Fooditemshow()}
@@ -164,7 +158,7 @@ export default function Cafescreen() {
 const styles = StyleSheet.create({
 
     Container_view: {
-        // backgroundColor: '#07afaa'
+        backgroundColor: '#fff'
     },
     carousal_view: {
         alignSelf: 'center',
@@ -177,7 +171,7 @@ const styles = StyleSheet.create({
         // borderWidth: 2,
         // borderRadius: 10,
         marginBottom: 10,
-        // backgroundColor: '#07afaa',
+        backgroundColor: '#fff',
         height: 60,
         justifyContent: "center",
         // alignItems:"center"
